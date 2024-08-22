@@ -23,7 +23,7 @@ class AccountRepositoryTest {
     public void saveAccount(){
 
         Account account = Account.builder()
-                .accountHolderName("Morenike")
+                .accountHolderName("Farida")
                 .balance(20000)
 
 

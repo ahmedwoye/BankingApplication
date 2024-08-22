@@ -1,8 +1,11 @@
 package com.albiscomglobal.BankingApp.Controller;
 
 
+import com.albiscomglobal.BankingApp.ReportService.ReportingExcel;
 import com.albiscomglobal.BankingApp.Service.AccountService;
 import com.albiscomglobal.BankingApp.dto.AccountDto;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,9 @@ import java.util.Map;
 public class AccountController {
 
     private final AccountService accountService;
+
+    @Autowired
+    private ReportingExcel reportingExcel;
 
 
     public AccountController(AccountService accountService) {
@@ -68,5 +74,19 @@ public class AccountController {
     public ResponseEntity<String> deleteAccount(@PathVariable  Long id){
         accountService.deleteSingleAccount(id);
         return ResponseEntity.ok("Account is deleted successfully!");
+    }
+
+
+    //Report Generate Excel Report
+
+    @GetMapping("/excel")
+    public void generateExcelReport(HttpServletResponse response)throws Exception{
+
+        response.setContentType("application/octect-stream");
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment;filename=AccountBeneficiaries.xls";
+        response.setHeader(headerKey, headerValue);
+        reportingExcel.generateExcel(response);
     }
 }
